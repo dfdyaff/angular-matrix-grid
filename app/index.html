@@ -1,0 +1,52 @@
+<html ng-app="Task" lang="EN">
+<head>
+    <title>Task</title>
+    <link rel="stylesheet" href="src/app.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600" rel="stylesheet">
+    <script src="lib/jquery/jQuery3.5.1.js"></script>
+    <script src="lib/jquery/jQueryui1.10.3.js"></script>
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/sortable/sortable.js"></script>
+    <script src="app.js"></script>
+</head>
+<body>
+
+<div id="app" ng-controller="appController">
+    <div class="search-container">
+        <input placeholder="Search" class="search" type="text" ng-model="searchQuery" ng-model-options="{debounce: 50}">
+        <img class="search-logo" src="/assets/search.png" alt="search">
+    </div>
+
+    <div class="table">
+        <div class='categories-container'>
+            <div ui-sortable="sortableOptions" ng-model="categories">
+                <div ng-repeat="category in categories" class="category draggable" ng-class="{active : activeMenu === category}" ng-click="setActive(category)">
+                    {{category.name}}
+                </div>
+            </div>
+        </div>
+
+        <div class='navigator-container'>
+            <div ng-model="navigator">
+                <div ng-repeat="nav in data" class="navigator">
+                    <h2>{{nav.name}}</h2>
+
+                    <div ng-repeat="tactic in nav.tactics | filter: { category_id : filteredTactics }" class="tactic">
+                        <h5>{{tactic.name}}</h5>
+                        <div
+                                ng-class="{shade_first : technique.id.colorShade === 1, shade_second : technique.id.colorShade === 2, shade_third : technique.id.colorShade === 3, shade_forth : technique.id.colorShade === 4, shade_fifth : technique.id.colorShade === 5}"
+                                ng-repeat="technique in tactic.techniques | filter: { name: searchQuery }"
+                                class="technique"
+                                ng-click="count = count + 1; handleShade(technique, count)">
+                            <label>{{technique.name}}</label>
+                            <img src="assets/info.png" alt="info">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
